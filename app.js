@@ -15,6 +15,7 @@ const index = require('./routes/index');
 const users = require('./routes/users');
 const cityApi = require('./routes/cityapi');
 const auth = require('./routes/auth');
+const question = require('./routes/questionapi');
 
 const app = express();
 
@@ -48,6 +49,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/cityapi', cityApi);
 app.use('/auth', auth);
+app.use('/question', question);
 
 
 // catch 404 and forward to error handler
