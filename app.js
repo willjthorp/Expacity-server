@@ -1,30 +1,53 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var cors = require('cors');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+const passport = require('passport');
+const response = require('./helpers/response');
+const configure = require('./config/passport');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
-var cityApi = require('./routes/cityapi');
+const index = require('./routes/index');
+const users = require('./routes/users');
+const cityApi = require('./routes/cityapi');
+const auth = require('./routes/auth');
 
-var app = express();
+const app = express();
 
-app.use(cors());
+mongoose.connect('mongodb://localhost/final-project');
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(session({
+  secret: 'todo-app',
+  resave: true,
+  saveUninitialized: true,
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection
+  })
+}));
+
+app.use(cors({
+  credentials: true,
+  origin: ['http://localhost:4200']
+}));
+
+configure(passport);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
 app.use('/cityapi', cityApi);
+app.use('/auth', auth);
 
 
 // catch 404 and forward to error handler
