@@ -11,7 +11,15 @@ const QuestionSchema = new Schema({
     type: Date,
     default: Date.now
   },
-  answers: [{ type: Schema.Types.ObjectId, ref: 'Answer' }]
+  answers: [
+      {
+        content: String,
+        date: {
+          type: Date,
+          default: Date.now
+        }
+      }
+  ]
   // creator: { type: Schema.Types.ObjectId, ref: 'User' }
 });
 
