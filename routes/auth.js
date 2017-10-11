@@ -93,7 +93,7 @@ router.post('/upload', upload.single('file'), (req, res, next) => {
 router.put('/me', (req, res, next) => {
 
   const userUpdate = {
-    pic_path: req.body.photo || req.user.photo,
+    pic_path: req.body.pic_path || req.user.pic_path,
   };
 
   User.findByIdAndUpdate(req.user._id, userUpdate, {
