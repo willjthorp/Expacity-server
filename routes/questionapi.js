@@ -4,7 +4,9 @@ const Question = require('../models/question');
 
 // Get all questions
 router.get('/questions', (req, res, next) => {
-  Question.find({}, (err, questions) => {
+  Question.find({}).sort({
+    date: -1
+  }).exec((err, questions) => {
     if (err) {
       return res.json(err).status(500);
     }
@@ -12,12 +14,27 @@ router.get('/questions', (req, res, next) => {
   });
 });
 
+
+// Get specific city questions
+router.get('/cityquestions/:id', (req, res, next) => {
+  Question.find({
+    'city': req.params.id + ''
+  }, (err, questions) => {
+    if (err) {
+      return res.json(err).status(500);
+    }
+    return res.json(questions);
+  });
+});
+
+
 // Post new question
 router.post('/questions', (req, res, next) => {
   const newQuestion = new Question({
     content: req.body.content,
     city: req.body.city,
-    answer: []
+    answers: [],
+    stars: 0
   });
   newQuestion.save((err) => {
     if (err) {
@@ -31,6 +48,26 @@ router.post('/questions', (req, res, next) => {
 });
 
 
+// Star a question
+router.get('/:questionId/addQuestionStar', (req, res, next) => {
+  const questionId = req.params.questionId;
+  const questionUpdate = {
+    $inc: {
+      "stars": 1
+    }
+  };
+  Question.findByIdAndUpdate(questionId, questionUpdate, (err, question) => {
+    if (err) {
+      return res.status(500).json(err);
+    }
+    if (questionUpdate.errors) {
+      return res.status(400).json(questionUpdate);
+    }
+    return res.json(questionUpdate);
+  });
+});
+
+
 // Add answer to question
 router.post('/:questionId/addanswer', (req, res, next) => {
   const questionId = req.params.questionId;
@@ -38,7 +75,8 @@ router.post('/:questionId/addanswer', (req, res, next) => {
   var questionUpdate = {
     $push: {
       "answers": {
-        content: req.body.content
+        content: req.body.content,
+        stars: 0
       }
     }
   };
@@ -52,6 +90,34 @@ router.post('/:questionId/addanswer', (req, res, next) => {
     }
     return res.json(questionUpdate);
   });
+});
+
+
+// Star an answer
+router.get('/:questionId/addAnswerStar/:answerId', (req, res, next) => {
+  const questionId = req.params.questionId + '';
+  const answerId = req.params.answerId + '';
+
+  Question.findOneAndUpdate({
+      "_id": questionId,
+      "answers._id": answerId
+    }, {
+      $inc: {
+        "answers.$.stars": 1
+      }
+    }, {
+      upsert: true
+    },
+
+    (err, question) => {
+      if (err) {
+        return res.status(500).json(err);
+      }
+      if (question.errors) {
+        return res.status(400).json(question);
+      }
+      return res.json(question);
+    });
 });
 
 module.exports = router;

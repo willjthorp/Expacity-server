@@ -10,6 +10,7 @@ const MongoStore = require('connect-mongo')(session);
 const passport = require('passport');
 const response = require('./helpers/response');
 const configure = require('./config/passport');
+const multer = require('multer');
 
 const index = require('./routes/index');
 const users = require('./routes/users');
@@ -42,7 +43,9 @@ app.use(passport.session());
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 app.use(cookieParser());
 
 app.use('/', index);

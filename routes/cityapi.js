@@ -1,20 +1,18 @@
-var express = require('express');
-var router = express.Router();
-var parseString = require('xml2js').parseString;
+const express = require('express');
+const router = express.Router();
+const parseString = require('xml2js').parseString;
 
 const https = require('https');
-const http = require('http');
+// const http = require('http');
 
 
 // Get all cities
 router.get('/cities', (req, res, next) => {
   https.get(`https://www.numbeo.com/api/cities?api_key=ghhbagkcagbicb`, (resp) => {
     let data = '';
-    // A chunk of data has been recieved.
     resp.on('data', (chunk) => {
       data += chunk;
     });
-    // The whole response has been received. Print out the result.
     resp.on('end', () => {
       res.json(JSON.parse(data));
     });
@@ -27,11 +25,9 @@ router.get('/cities', (req, res, next) => {
 router.get('/indices/:city', (req, res, next) => {
   https.get(`https://www.numbeo.com/api/indices?api_key=ghhbagkcagbicb&query=${req.params.city}`, (resp) => {
     let data = '';
-    // A chunk of data has been recieved.
     resp.on('data', (chunk) => {
       data += chunk;
     });
-    // The whole response has been received. Print out the result.
     resp.on('end', () => {
       res.json(JSON.parse(data));
     });
@@ -45,11 +41,9 @@ router.get('/indices/:city', (req, res, next) => {
 router.get('/photoreference/:city', (req, res, next) => {
   https.get(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${req.params.city}&key=AIzaSyCRBJhxq4B8uCjH3NTkCWO34M6UVQO-Sfg`, (resp) => {
     let data = '';
-    // A chunk of data has been recieved.
     resp.on('data', (chunk) => {
       data += chunk;
     });
-    // The whole response has been received. Print out the result.
     resp.on('end', () => {
       res.json(JSON.parse(data));
     });
@@ -76,11 +70,9 @@ router.get('/photo/:photo', (req, res, next) => {
 router.get('/prices/:city', (req, res, next) => {
   https.get(`https://www.numbeo.com/api/city_prices?api_key=ghhbagkcagbicb&query=${req.params.city}`, (resp) => {
     let data = '';
-    // A chunk of data has been recieved.
     resp.on('data', (chunk) => {
       data += chunk;
     });
-    // The whole response has been received. Print out the result.
     resp.on('end', () => {
       res.json(JSON.parse(data));
     });
@@ -94,11 +86,9 @@ router.get('/prices/:city', (req, res, next) => {
 router.get('/city_climate/:city', (req, res, next) => {
   https.get(`https://www.numbeo.com/api/city_climate?api_key=ghhbagkcagbicb&query=${req.params.city}`, (resp) => {
     let data = '';
-    // A chunk of data has been recieved.
     resp.on('data', (chunk) => {
       data += chunk;
     });
-    // The whole response has been received. Print out the result.
     resp.on('end', () => {
       res.json(JSON.parse(data));
     });

@@ -6,6 +6,10 @@ const bcrypt = require('bcrypt');
 const response = require('../helpers/response');
 const User = require('../models/user').User;
 
+const upload = require('../config/multer');
+
+
+// Login User
 router.post('/login', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) {
@@ -23,6 +27,7 @@ router.post('/login', (req, res, next) => {
   })(req, res, next);
 });
 
+// Signup User
 router.post('/signup', (req, res, next) => {
   const {
     username,
@@ -73,10 +78,45 @@ router.post('/signup', (req, res, next) => {
   });
 });
 
+
+//UPLOAD FILE
+router.post('/upload', upload.single('file'), (req, res, next) => {
+  const data = {
+    userFileName: `/uploads/${req.file.filename}`
+  };
+
+  return response.data(req, res, data);
+});
+
+
+//Update USER profile
+router.put('/me', (req, res, next) => {
+
+  const userUpdate = {
+    pic_path: req.body.photo || req.user.photo,
+  };
+
+  User.findByIdAndUpdate(req.user._id, userUpdate, {
+    new: true
+  }, (err, user) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return response.notFound(req, res);
+    }
+    let data = user.asData();
+    return response.data(req, res, data);
+  });
+});
+
+
+// Logout user
 router.post('/logout', (req, res) => {
   req.logout();
   return response.ok(req, res);
 });
+
 
 router.get('/me', (req, res) => {
   if (req.isAuthenticated()) {
