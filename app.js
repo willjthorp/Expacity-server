@@ -1,3 +1,5 @@
+const dotenv = require('dotenv').config();
+
 const express = require('express');
 const path = require('path');
 const logger = require('morgan');
@@ -20,7 +22,8 @@ const question = require('./routes/questionapi');
 
 const app = express();
 
-mongoose.connect('mongodb://localhost/final-project');
+
+mongoose.connect(process.env.MONGO_DB_URL);
 
 app.use(session({
   secret: 'todo-app',
@@ -31,9 +34,10 @@ app.use(session({
   })
 }));
 
+
 app.use(cors({
   credentials: true,
-  origin: ['http://localhost:4200']
+  origin: [process.env.FRONTEND_URL]
 }));
 
 configure(passport);
