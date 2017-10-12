@@ -6,7 +6,7 @@ const Question = require('../models/question');
 router.get('/questions', (req, res, next) => {
   Question.find({}).sort({
     date: -1
-  }).exec((err, questions) => {
+  }).populate('creator').exec((err, questions) => {
     if (err) {
       return res.json(err).status(500);
     }
@@ -18,8 +18,20 @@ router.get('/questions', (req, res, next) => {
 // Get specific city questions
 router.get('/cityquestions/:id', (req, res, next) => {
   Question.find({
-    'city': req.params.id + ''
-  }, (err, questions) => {
+    'city': req.params.id
+  }).populate('creator').exec((err, questions) => {
+    if (err) {
+      return res.json(err).status(500);
+    }
+    return res.json(questions);
+  });
+});
+
+// Get specific user questions
+router.get('/userquestions/:id', (req, res, next) => {
+  Question.find({
+    'creator': req.params.id
+  }).populate('creator').exec((err, questions) => {
     if (err) {
       return res.json(err).status(500);
     }
@@ -34,8 +46,11 @@ router.post('/questions', (req, res, next) => {
     content: req.body.content,
     city: req.body.city,
     answers: [],
-    stars: 0
+    stars: 0,
   });
+  if (req.user) {
+    newQuestion.creator = req.user._id;
+  }
   newQuestion.save((err) => {
     if (err) {
       return res.status(500).json(err);

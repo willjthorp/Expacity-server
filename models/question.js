@@ -19,8 +19,11 @@ const QuestionSchema = new Schema({
     },
     stars: Number
   }],
-  stars: Number
-  // creator: { type: Schema.Types.ObjectId, ref: 'User' }
+  stars: Number,
+  creator: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }
 });
 
 module.exports = mongoose.model('Question', QuestionSchema);

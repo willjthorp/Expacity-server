@@ -61,7 +61,8 @@ router.post('/signup', (req, res, next) => {
     const newUser = User({
       username,
       email,
-      password: hashPass
+      password: hashPass,
+      pic_path: '/uploads/profile.jpg'
     });
 
     newUser.save((err) => {
@@ -118,6 +119,7 @@ router.post('/logout', (req, res) => {
 });
 
 
+// Get user info
 router.get('/me', (req, res) => {
   if (req.isAuthenticated()) {
     let user = req.user;

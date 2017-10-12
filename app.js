@@ -25,6 +25,11 @@ const app = express();
 
 mongoose.connect(process.env.MONGO_DB_URL);
 
+// view engine setup
+app.set('layout', 'layouts/main-layout');
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
 app.use(session({
   secret: 'todo-app',
   resave: true,
@@ -42,6 +47,7 @@ app.use(cors({
 
 configure(passport);
 
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
 

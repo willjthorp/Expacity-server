@@ -17,8 +17,8 @@ const UserSchema = new Schema({
   },
   pic_path: {
     type: String,
-    default: '/images/profile-default.jpg'
-  },
+    default: '/uploads/profile.jpg'
+  }
 });
 
 UserSchema.methods.generateHash = function(password) {
@@ -33,7 +33,8 @@ UserSchema.methods.asData = function() {
   return {
     id: this._id,
     username: this.username,
-    email: this.email
+    email: this.email,
+    pic_path: this.pic_path
   };
 };
 
