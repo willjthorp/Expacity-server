@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const parseString = require('xml2js').parseString;
 
 const https = require('https');
-// const http = require('http');
 
 
 // Get all cities
