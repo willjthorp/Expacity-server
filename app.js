@@ -14,8 +14,6 @@ const response = require('./helpers/response');
 const configure = require('./config/passport');
 const multer = require('multer');
 
-const index = require('./routes/index');
-const users = require('./routes/users');
 const cityApi = require('./routes/cityapi');
 const auth = require('./routes/auth');
 const question = require('./routes/questionapi');
@@ -58,8 +56,6 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 
-app.use('/', index);
-app.use('/users', users);
 app.use('/cityapi', cityApi);
 app.use('/auth', auth);
 app.use('/question', question);
