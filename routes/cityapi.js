@@ -50,7 +50,6 @@ router.get('/photoreference/:city', (req, res, next) => {
 // Use photo reference to retrieve city photo
 router.get('/photo/:photo', (req, res, next) => {
   https.get(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=2000&photoreference=${req.params.photo}&key=AIzaSyBHkXsl7oyvinskwdVcnjeKJ3hMeCbD5eY`, (resp) => {
-    console.log('resp:', resp.headers.location);
     res.json({
       location: resp.headers.location
     });
