@@ -2,12 +2,9 @@ const express = require('express');
 const passport = require('passport');
 const router = express.Router();
 const bcrypt = require('bcrypt');
-
 const response = require('../helpers/response');
 const User = require('../models/user').User;
-
 const upload = require('../config/multer');
-
 
 // Login User
 router.post('/login', (req, res, next) => {
@@ -79,8 +76,7 @@ router.post('/signup', (req, res, next) => {
   });
 });
 
-
-//UPLOAD FILE
+//Upload file
 router.post('/upload', upload.single('file'), (req, res, next) => {
   const data = {
     userFileName: `/uploads/${req.file.filename}`

@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
 const https = require('https');
-
 
 // Get all cities
 router.get('/cities', (req, res, next) => {
@@ -34,10 +32,9 @@ router.get('/indices/:city', (req, res, next) => {
   });
 });
 
-
 // Get google photo reference for city
 router.get('/photoreference/:city', (req, res, next) => {
-  https.get(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${req.params.city}&key=AIzaSyCRBJhxq4B8uCjH3NTkCWO34M6UVQO-Sfg`, (resp) => {
+  https.get(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${req.params.city}&key=AIzaSyBHkXsl7oyvinskwdVcnjeKJ3hMeCbD5eY`, (resp) => {
     let data = '';
     resp.on('data', (chunk) => {
       data += chunk;
@@ -50,10 +47,9 @@ router.get('/photoreference/:city', (req, res, next) => {
   });
 });
 
-
 // Use photo reference to retrieve city photo
 router.get('/photo/:photo', (req, res, next) => {
-  https.get(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=2000&photoreference=${req.params.photo}&key=AIzaSyCRBJhxq4B8uCjH3NTkCWO34M6UVQO-Sfg`, (resp) => {
+  https.get(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=2000&photoreference=${req.params.photo}&key=AIzaSyBHkXsl7oyvinskwdVcnjeKJ3hMeCbD5eY`, (resp) => {
     console.log('resp:', resp.headers.location);
     res.json({
       location: resp.headers.location
@@ -62,7 +58,6 @@ router.get('/photo/:photo', (req, res, next) => {
     res.json("Error: " + err.message);
   });
 });
-
 
 // Get city prices information
 router.get('/prices/:city', (req, res, next) => {
@@ -79,7 +74,6 @@ router.get('/prices/:city', (req, res, next) => {
   });
 });
 
-
 // Get city climate information
 router.get('/city_climate/:city', (req, res, next) => {
   https.get(`https://www.numbeo.com/api/city_climate?api_key=ghhbagkcagbicb&query=${req.params.city}`, (resp) => {
@@ -94,8 +88,6 @@ router.get('/city_climate/:city', (req, res, next) => {
     res.json("Error: " + err.message);
   });
 });
-
-
 
 
 module.exports = router;

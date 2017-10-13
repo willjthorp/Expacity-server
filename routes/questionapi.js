@@ -14,7 +14,6 @@ router.get('/questions', (req, res, next) => {
   });
 });
 
-
 // Get specific city questions
 router.get('/cityquestions/:id', (req, res, next) => {
   Question.find({
@@ -39,7 +38,6 @@ router.get('/userquestions/:id', (req, res, next) => {
   });
 });
 
-
 // Post new question
 router.post('/questions', (req, res, next) => {
   const newQuestion = new Question({
@@ -62,7 +60,6 @@ router.post('/questions', (req, res, next) => {
   });
 });
 
-
 // Star a question
 router.get('/:questionId/addQuestionStar', (req, res, next) => {
   const questionId = req.params.questionId;
@@ -81,7 +78,6 @@ router.get('/:questionId/addQuestionStar', (req, res, next) => {
     return res.json(questionUpdate);
   });
 });
-
 
 // Add answer to question
 router.post('/:questionId/addanswer', (req, res, next) => {
@@ -106,7 +102,6 @@ router.post('/:questionId/addanswer', (req, res, next) => {
     return res.json(questionUpdate);
   });
 });
-
 
 // Star an answer
 router.get('/:questionId/addAnswerStar/:answerId', (req, res, next) => {
